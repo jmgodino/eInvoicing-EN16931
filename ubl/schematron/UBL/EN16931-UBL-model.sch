@@ -74,11 +74,11 @@
   <param name="BR-CO-15" value="every $Currency in cbc:DocumentCurrencyCode satisfies (count(cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) eq 1) and (cac:LegalMonetaryTotal/xs:decimal(cbc:TaxInclusiveAmount) = round( (cac:LegalMonetaryTotal/xs:decimal(cbc:TaxExclusiveAmount) + cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) * 10 * 10) div 100)"/>
 
   <!-- BR-CO-16 modificada> en versión de 2026 -->
-  <param name="BR-CO-16" value="f:get-valor-num(cbc:PayableAmount, 0) = f:redondeaImporte(
-    f:get-valor-num(cbc:TaxInclusiveAmount, 0) -
-    f:get-valor-num(cbc:PrepaidAmount, 0) + 
-    sum(f:get-valor-num(../cac:CollectionInvoiceLine/cbc:TaxInclusiveLineExtensionAmount, 0)) +
-    f:get-valor-num(cbc:PayableRoundingAmount, 0))
+  <param name="BR-CO-16" value="f:comoNumero(cbc:PayableAmount, 0) = f:redondeaImporte(
+    f:comoNumero(cbc:TaxInclusiveAmount, 0) -
+    f:comoNumero(cbc:PrepaidAmount, 0) + 
+    f:comoNumero(../cac:CollectionInvoiceLine/cbc:TaxInclusiveLineExtensionAmount, 0) +
+    f:comoNumero(cbc:PayableRoundingAmount, 0))
   "/>
 
   <!-- BR-CO-17: Suprimida en versión de 2026 -->
@@ -92,13 +92,13 @@
   <param name="BR-CO-24" value="exists(cbc:AllowanceChargeReason) or exists(cbc:AllowanceChargeReasonCode)"/>
   <param name="BR-CO-26" value="exists(cac:Party/cac:PartyTaxScheme[cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']/cbc:CompanyID) or exists(cac:Party/cac:PartyIdentification/cbc:ID[not(@schemeID = 'SEPA')]) or exists(cac:Party/cac:PartyLegalEntity/cbc:CompanyID)"/>
 
-  <param name="BR-CO-32" value="f:get-valor-num(cbc:LineExtensionAmount, 0) = 
+  <param name="BR-CO-32" value="f:comoNumero(cbc:LineExtensionAmount, 0) = 
     round(
-      (f:get-valor-num(cac:Price/cbc:PriceAmount,0) div 
-       f:get-valor-num(cac:Price/cbc:BaseQuantity, 1)) * 
-      f:get-valor-num(cbc:InvoicedQuantity, 1), 2) + 
-    f:get-valor-num(cac:AllowanceCharge[cbc:ChargeIndicator = true()]/cbc:Amount, 0) - 
-    f:get-valor-num(cac:AllowanceCharge[cbc:ChargeIndicator = false()]/cbc:Amount, 0)" />  
+      (f:comoNumero(cac:Price/cbc:PriceAmount,0) div 
+       f:comoNumero(cac:Price/cbc:BaseQuantity, 1)) * 
+      f:comoNumero(cbc:InvoicedQuantity, 1), 2) + 
+    f:comoNumero(cac:AllowanceCharge[cbc:ChargeIndicator = true()]/cbc:Amount, 0) - 
+    f:comoNumero(cac:AllowanceCharge[cbc:ChargeIndicator = false()]/cbc:Amount, 0)" />  
 
   <param name="BR-S-01" value="((count(//cac:AllowanceCharge/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) + count(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S'])) &gt; 0 and count(cac:TaxTotal/cac:TaxSubtotal/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) &gt; 0) or ((count(//cac:AllowanceCharge/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) + count(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S'])) = 0 and count(cac:TaxTotal/cac:TaxSubtotal/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) = 0)"/>
   <param name="BR-S-02" value="(exists(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']) and (exists(//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID) or exists(//cac:TaxRepresentativeParty/cac:PartyTaxScheme[cac:TaxScheme/(normalize-space(upper-case(cbc:ID)) = 'VAT')]/cbc:CompanyID))) or not(exists(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S']))"/>

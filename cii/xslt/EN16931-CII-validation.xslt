@@ -25,23 +25,16 @@
 <!--XSD TYPES FOR XSLT2-->
 
 
-<xsl:function as="xsd:decimal" name="f:get-valor-num">
-    <xsl:param as="node()*" name="elemento" />
+<xsl:function as="xs:decimal" name="f:comoNumero">
+    <xsl:param as="item()*" name="valores" />
     <xsl:param as="xs:decimal" name="defecto" />
-    <xsl:choose>
-      <xsl:when test="$elemento">
-        <xsl:value-of select="$elemento" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$defecto" />
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:sequence select="    if (empty($valores))    then $defecto    else sum(     for $v in $valores     return      if (normalize-space(string($v)) castable as xs:decimal)      then xs:decimal(normalize-space(string($v)))      else 0    )   " />
   </xsl:function>
-  <xsl:function as="xsd:decimal" name="f:redondeaImporte">
+<xsl:function as="xsd:decimal" name="f:redondeaImporte">
     <xsl:param as="xs:decimal" name="valor" />
     <xsl:value-of select="round($valor, 2)" />
   </xsl:function>
-  <xsl:function as="xsd:boolean" name="f:margen">
+<xsl:function as="xsd:boolean" name="f:enMargen">
     <xsl:param as="xs:decimal" name="valor" />
     <xsl:param as="xs:decimal" name="referencia" />
     <xsl:param as="xs:decimal" name="tolerancia" />
