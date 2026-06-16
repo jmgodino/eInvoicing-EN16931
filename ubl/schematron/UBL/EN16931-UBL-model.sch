@@ -74,11 +74,11 @@
   <param name="BR-CO-15" value="every $Currency in cbc:DocumentCurrencyCode satisfies (count(cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) eq 1) and (cac:LegalMonetaryTotal/xs:decimal(cbc:TaxInclusiveAmount) = round( (cac:LegalMonetaryTotal/xs:decimal(cbc:TaxExclusiveAmount) + cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) * 10 * 10) div 100)"/>
 
   <!-- BR-CO-16 modificada> en versión de 2026 -->
-  <param name="BR-CO-16" value="f:comoNumero(cbc:PayableAmount, 0) = f:redondeaImporte(
+  <param name="BR-CO-16" value="f:enMargen(f:comoNumero(cbc:PayableAmount, 0), f:redondeaImporte(
     f:comoNumero(cbc:TaxInclusiveAmount, 0) -
     f:comoNumero(cbc:PrepaidAmount, 0) + 
     f:comoNumero(../cac:CollectionInvoiceLine/cbc:TaxInclusiveLineExtensionAmount, 0) +
-    f:comoNumero(cbc:PayableRoundingAmount, 0))
+    f:comoNumero(cbc:PayableRoundingAmount, 0)), 0.1)
   "/>
 
   <!-- BR-CO-17: Suprimida en versión de 2026 -->

@@ -159,7 +159,7 @@
 	</cac:CollectionInvoiceLine>
 	<cac:CollectionInvoiceLine>
 		<cbc:ID>SUPL</cbc:ID>
-		<cbc:TaxInclusiveLineExtensionAmount currencyID="EUR">4.4</cbc:TaxInclusiveLineExtensionAmount>
+		<cbc:TaxInclusiveLineExtensionAmount currencyID="EUR">4.3</cbc:TaxInclusiveLineExtensionAmount>
 		<cac:Item>
 			<cbc:Description>Suplido</cbc:Description>
 		</cac:Item>

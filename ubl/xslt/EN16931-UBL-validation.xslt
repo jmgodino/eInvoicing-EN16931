@@ -687,9 +687,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="f:comoNumero(cbc:PayableAmount, 0) = f:redondeaImporte(     f:comoNumero(cbc:TaxInclusiveAmount, 0) -     f:comoNumero(cbc:PrepaidAmount, 0) +      f:comoNumero(../cac:CollectionInvoiceLine/cbc:TaxInclusiveLineExtensionAmount, 0) +     f:comoNumero(cbc:PayableRoundingAmount, 0))" />
+      <xsl:when test="f:enMargen(f:comoNumero(cbc:PayableAmount, 0), f:redondeaImporte(     f:comoNumero(cbc:TaxInclusiveAmount, 0) -     f:comoNumero(cbc:PrepaidAmount, 0) +      f:comoNumero(../cac:CollectionInvoiceLine/cbc:TaxInclusiveLineExtensionAmount, 0) +     f:comoNumero(cbc:PayableRoundingAmount, 0)), 0.1)" />
       <xsl:otherwise>
-        <svrl:failed-assert test="f:comoNumero(cbc:PayableAmount, 0) = f:redondeaImporte( f:comoNumero(cbc:TaxInclusiveAmount, 0) - f:comoNumero(cbc:PrepaidAmount, 0) + f:comoNumero(../cac:CollectionInvoiceLine/cbc:TaxInclusiveLineExtensionAmount, 0) + f:comoNumero(cbc:PayableRoundingAmount, 0))">
+        <svrl:failed-assert test="f:enMargen(f:comoNumero(cbc:PayableAmount, 0), f:redondeaImporte( f:comoNumero(cbc:TaxInclusiveAmount, 0) - f:comoNumero(cbc:PrepaidAmount, 0) + f:comoNumero(../cac:CollectionInvoiceLine/cbc:TaxInclusiveLineExtensionAmount, 0) + f:comoNumero(cbc:PayableRoundingAmount, 0)), 0.1)">
           <xsl:attribute name="id">BR-CO-16</xsl:attribute>
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">
