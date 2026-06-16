@@ -29,7 +29,7 @@
       <plugin>
         <groupId>io.github.spfe</groupId>
         <artifactId>ph-schematron-maven-plugin</artifactId>
-        <version>9.1.1</version>
+        <version>9.2.2</version>
         <executions>
           <execution>
             <id>cii</id>
