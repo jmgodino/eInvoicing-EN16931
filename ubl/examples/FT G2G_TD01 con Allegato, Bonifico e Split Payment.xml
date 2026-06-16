@@ -117,16 +117,16 @@
 		</cac:TaxSubtotal>
 	</cac:TaxTotal>
 	<cac:LegalMonetaryTotal>
-		<cbc:LineExtensionAmount currencyID="EUR">1246.00</cbc:LineExtensionAmount>
-		<cbc:TaxExclusiveAmount currencyID="EUR">1246.00</cbc:TaxExclusiveAmount>
-		<cbc:TaxInclusiveAmount currencyID="EUR">1520.12</cbc:TaxInclusiveAmount>
+		<cbc:LineExtensionAmount currencyID="EUR">1246.02</cbc:LineExtensionAmount>
+		<cbc:TaxExclusiveAmount currencyID="EUR">1246.02</cbc:TaxExclusiveAmount>
+		<cbc:TaxInclusiveAmount currencyID="EUR">1520.14</cbc:TaxInclusiveAmount>
 		<cbc:PrepaidAmount currencyID="EUR">274.12</cbc:PrepaidAmount>
-		<cbc:PayableAmount currencyID="EUR">1246.00</cbc:PayableAmount>
+		<cbc:PayableAmount currencyID="EUR">1246.02</cbc:PayableAmount>
 	</cac:LegalMonetaryTotal>
 	<cac:InvoiceLine>
 		<cbc:ID>1</cbc:ID>
 		<cbc:InvoicedQuantity unitCode="C62">20</cbc:InvoicedQuantity>
-		<cbc:LineExtensionAmount currencyID="EUR">1246.00</cbc:LineExtensionAmount>
+		<cbc:LineExtensionAmount currencyID="EUR">1246.02</cbc:LineExtensionAmount>
 		<cbc:AccountingCost>B09.01.068</cbc:AccountingCost>
 		<cac:DocumentReference>
 			<cbc:ID schemeID="ABT">229032/B</cbc:ID>
@@ -146,7 +146,8 @@
 			</cac:ClassifiedTaxCategory>
 		</cac:Item>
 		<cac:Price>
-			<cbc:PriceAmount currencyID="EUR">62.30</cbc:PriceAmount>
+			<cbc:PriceAmount currencyID="EUR">62.30111111</cbc:PriceAmount>
+			<cbc:BaseQuantity>1</cbc:BaseQuantity>
 		</cac:Price>
 	</cac:InvoiceLine>
 </Invoice>

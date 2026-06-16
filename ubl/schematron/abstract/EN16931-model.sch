@@ -130,6 +130,7 @@
     <assert test="$BR-28" flag="fatal" id="BR-28">[BR-28]-The Item gross price (BT-148) shall NOT be negative.</assert>
     <assert test="$BR-CO-04" flag="fatal" id="BR-CO-04">[BR-CO-04]-Each Invoice line (BG-25) shall be categorized with an Invoiced item VAT category code (BT-151).</assert>
     <assert test="$BR-DEC-23" flag="fatal" id="BR-DEC-23">[BR-DEC-23]-The allowed maximum number of decimals for the Invoice line net amount (BT-131) is 2.</assert>
+    <assert test="$BR-CO-32" flag="fatal" id="BR-CO-32">[BR-CO-32]-XXXX</assert>    
   </rule>
   <rule context="$Invoice_line_allowances ">
     <assert test="$BR-41" flag="fatal" id="BR-41">[BR-41]-Each Invoice line allowance (BG-27) shall have an Invoice line allowance amount (BT-136).</assert>

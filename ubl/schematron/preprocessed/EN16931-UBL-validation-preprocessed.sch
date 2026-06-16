@@ -146,6 +146,7 @@
       <assert id="BR-28" flag="fatal" test="(cac:Price/cac:AllowanceCharge/cbc:BaseAmount) >= 0 or not(exists(cac:Price/cac:AllowanceCharge/cbc:BaseAmount))">[BR-28]-The Item gross price (BT-148) shall NOT be negative.</assert>
       <assert id="BR-CO-04" flag="fatal" test="(cac:Item/cac:ClassifiedTaxCategory[cac:TaxScheme/(normalize-space(upper-case(cbc:ID))='VAT')]/cbc:ID)">[BR-CO-04]-Each Invoice line (BG-25) shall be categorized with an Invoiced item VAT category code (BT-151).</assert>
       <assert id="BR-DEC-23" flag="fatal" test="string-length(substring-after(cbc:LineExtensionAmount,'.'))&lt;=2">[BR-DEC-23]-The allowed maximum number of decimals for the Invoice line net amount (BT-131) is 2.</assert>
+      <assert id="BR-CO-32" flag="fatal" test="f:get-valor-num(cbc:LineExtensionAmount, 0) =      round(       (f:get-valor-num(cac:Price/cbc:PriceAmount,0) div         f:get-valor-num(cac:Price/cbc:BaseQuantity, 1)) *        f:get-valor-num(cbc:InvoicedQuantity, 1), 2) +      f:get-valor-num(cac:AllowanceCharge[cbc:ChargeIndicator = true()]/cbc:Amount, 0) -      f:get-valor-num(cac:AllowanceCharge[cbc:ChargeIndicator = false()]/cbc:Amount, 0)">[BR-CO-32]-XXXX</assert>
     </rule>
     <rule context="//cac:InvoiceLine/cac:AllowanceCharge[cbc:ChargeIndicator = false()] | //cac:CreditNoteLine/cac:AllowanceCharge[cbc:ChargeIndicator = false()]">
       <assert id="BR-41" flag="fatal" test="exists(cbc:Amount)">[BR-41]-Each Invoice line allowance (BG-27) shall have an Invoice line allowance amount (BT-136).</assert>

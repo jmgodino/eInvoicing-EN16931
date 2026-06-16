@@ -243,7 +243,7 @@
     <cac:InvoiceLine>
         <cbc:ID>1</cbc:ID>
         <cbc:Note>Scratch on box</cbc:Note>
-        <cbc:InvoicedQuantity unitCode="EA">2</cbc:InvoicedQuantity>
+        <cbc:InvoicedQuantity unitCode="EA">1</cbc:InvoicedQuantity>
         <cbc:LineExtensionAmount currencyID="NOK">1273.00</cbc:LineExtensionAmount>
         <cbc:AccountingCost>BookingCode001</cbc:AccountingCost>
         <cac:InvoicePeriod>

@@ -4,10 +4,10 @@
     Licensed under European Union Public Licence (EUPL) version 1.2.
 
 -->
-<!--Schematron version 1.3.16 - Last update: 2026-03-30--><xsl:stylesheet xmlns:svrl="http://purl.oclc.org/dsdl/svrl" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cn="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:iso="http://purl.oclc.org/dsdl/schematron" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDataTypes-2" xmlns:saxon="http://saxon.sf.net/" xmlns:schold="http://www.ascc.net/xml/schematron" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:udt="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
-<!--Implementers: please note that overriding process-prolog or process-root is 
+<!--Schematron version 1.3.16 - Last update: 2026-03-30-->
+<xsl:stylesheet xmlns:svrl="http://purl.oclc.org/dsdl/svrl" xmlns:cac="urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2" xmlns:cbc="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2" xmlns:cn="urn:oasis:names:specification:ubl:schema:xsd:CreditNote-2" xmlns:ext="urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2" xmlns:f="#functions" xmlns:iso="http://purl.oclc.org/dsdl/schematron" xmlns:qdt="urn:oasis:names:specification:ubl:schema:xsd:QualifiedDataTypes-2" xmlns:saxon="http://saxon.sf.net/" xmlns:schold="http://www.ascc.net/xml/schematron" xmlns:ubl="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:udt="urn:oasis:names:specification:ubl:schema:xsd:UnqualifiedDataTypes-2" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
+  <!--Implementers: please note that overriding process-prolog or process-root is 
     the preferred method for meta-stylesheets to use where possible. -->
-
 <xsl:param name="archiveDirParameter" />
   <xsl:param name="archiveNameParameter" />
   <xsl:param name="fileNameParameter" />
@@ -25,7 +25,18 @@
 <!--XSD TYPES FOR XSLT2-->
 
 
-<!--KEYS AND FUNCTIONS-->
+<xsl:function as="xsd:decimal" name="f:get-valor-num">
+    <xsl:param as="node()*" name="elemento" />
+    <xsl:param as="xs:decimal" name="defecto" />
+    <xsl:choose>
+      <xsl:when test="$elemento">
+        <xsl:value-of select="$elemento" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$defecto" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:function>
 
 
 <!--DEFAULT RULES-->
@@ -91,10 +102,9 @@
       <xsl:text />/@<xsl:value-of select="name(.)" />
     </xsl:if>
   </xsl:template>
-<!--MODE: SCHEMATRON-FULL-PATH-3-->
+  <!--MODE: SCHEMATRON-FULL-PATH-3-->
 <!--This mode can be used to generate prefixed XPath for humans 
 	(Top-level element has index)-->
-
 <xsl:template match="node() | @*" mode="schematron-get-full-path-3">
     <xsl:for-each select="ancestor-or-self::*">
       <xsl:text>/</xsl:text>
@@ -154,7 +164,8 @@
     <xsl:text>_</xsl:text>
     <xsl:value-of select="translate(name(),':','.')" />
   </xsl:template>
-<!--Strip characters-->  <xsl:template match="text()" priority="-1" />
+  <!--Strip characters-->
+  <xsl:template match="text()" priority="-1" />
 
 <!--SCHEMA SETUP-->
 <xsl:template match="/">
@@ -1862,6 +1873,21 @@
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
           </xsl:attribute>
           <svrl:text>[BR-DEC-23]-The allowed maximum number of decimals for the Invoice line net amount (BT-131) is 2.</svrl:text>
+        </svrl:failed-assert>
+      </xsl:otherwise>
+    </xsl:choose>
+
+		<!--ASSERT -->
+<xsl:choose>
+      <xsl:when test="f:get-valor-num(cbc:LineExtensionAmount, 0) =      round(       (f:get-valor-num(cac:Price/cbc:PriceAmount,0) div         f:get-valor-num(cac:Price/cbc:BaseQuantity, 1)) *        f:get-valor-num(cbc:InvoicedQuantity, 1), 2) +      f:get-valor-num(cac:AllowanceCharge[cbc:ChargeIndicator = true()]/cbc:Amount, 0) -      f:get-valor-num(cac:AllowanceCharge[cbc:ChargeIndicator = false()]/cbc:Amount, 0)" />
+      <xsl:otherwise>
+        <svrl:failed-assert test="f:get-valor-num(cbc:LineExtensionAmount, 0) = round( (f:get-valor-num(cac:Price/cbc:PriceAmount,0) div f:get-valor-num(cac:Price/cbc:BaseQuantity, 1)) * f:get-valor-num(cbc:InvoicedQuantity, 1), 2) + f:get-valor-num(cac:AllowanceCharge[cbc:ChargeIndicator = true()]/cbc:Amount, 0) - f:get-valor-num(cac:AllowanceCharge[cbc:ChargeIndicator = false()]/cbc:Amount, 0)">
+          <xsl:attribute name="id">BR-CO-32</xsl:attribute>
+          <xsl:attribute name="flag">fatal</xsl:attribute>
+          <xsl:attribute name="location">
+            <xsl:apply-templates mode="schematron-select-full-path" select="." />
+          </xsl:attribute>
+          <svrl:text>[BR-CO-32]-XXXX</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>

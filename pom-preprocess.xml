@@ -27,7 +27,7 @@
   <build>
     <plugins>
       <plugin>
-        <groupId>com.helger.maven</groupId>
+        <groupId>io.github.spfe</groupId>
         <artifactId>ph-schematron-maven-plugin</artifactId>
         <version>9.1.1</version>
         <executions>

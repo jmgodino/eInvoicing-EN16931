@@ -109,6 +109,8 @@
         <cbc:TaxInclusiveAmount currencyID="EUR">250.33</cbc:TaxInclusiveAmount>
         <cbc:PayableAmount currencyID="EUR">250.33</cbc:PayableAmount>
     </cac:LegalMonetaryTotal>
+    
+    
     <cac:InvoiceLine>
         <cbc:ID>1</cbc:ID>
         <cbc:InvoicedQuantity unitCode="EA">2</cbc:InvoicedQuantity>
@@ -489,7 +491,7 @@
     </cac:InvoiceLine>
     <cac:InvoiceLine>
         <cbc:ID>19</cbc:ID>
-        <cbc:InvoicedQuantity unitCode="EA">6</cbc:InvoicedQuantity>
+        <cbc:InvoicedQuantity unitCode="EA">1</cbc:InvoicedQuantity>
         <cbc:LineExtensionAmount currencyID="EUR">102.12</cbc:LineExtensionAmount>
         <cac:Item>
             <cbc:Name>EM FRITUURVET </cbc:Name>
@@ -505,12 +507,12 @@
             </cac:ClassifiedTaxCategory>
         </cac:Item>
         <cac:Price>
-            <cbc:PriceAmount currencyID="EUR">17.02</cbc:PriceAmount>
+            <cbc:PriceAmount currencyID="EUR">102.12</cbc:PriceAmount>
         </cac:Price>
     </cac:InvoiceLine>
     <cac:InvoiceLine>
         <cbc:ID>20</cbc:ID>
-        <cbc:InvoicedQuantity unitCode="EA">6</cbc:InvoicedQuantity>
+        <cbc:InvoicedQuantity unitCode="EA">-1</cbc:InvoicedQuantity>
         <cbc:LineExtensionAmount currencyID="EUR">-109.98</cbc:LineExtensionAmount>
         <cac:Item>
             <cbc:Name>FRITUUR VET 10 KG RETOUR </cbc:Name>
@@ -526,7 +528,7 @@
             </cac:ClassifiedTaxCategory>
         </cac:Item>
         <cac:Price>
-            <cbc:PriceAmount currencyID="EUR">18.33</cbc:PriceAmount>
+            <cbc:PriceAmount currencyID="EUR">109.98</cbc:PriceAmount>
         </cac:Price>
     </cac:InvoiceLine>
 </Invoice>
