@@ -121,7 +121,7 @@
 		<cbc:TaxExclusiveAmount currencyID="EUR">1246.02</cbc:TaxExclusiveAmount>
 		<cbc:TaxInclusiveAmount currencyID="EUR">1520.14</cbc:TaxInclusiveAmount>
 		<cbc:PrepaidAmount currencyID="EUR">274.12</cbc:PrepaidAmount>
-		<cbc:PayableAmount currencyID="EUR">1246.02</cbc:PayableAmount>
+		<cbc:PayableAmount currencyID="EUR">1256.02</cbc:PayableAmount>
 	</cac:LegalMonetaryTotal>
 	<cac:InvoiceLine>
 		<cbc:ID>1</cbc:ID>
@@ -150,4 +150,11 @@
 			<cbc:BaseQuantity>1</cbc:BaseQuantity>
 		</cac:Price>
 	</cac:InvoiceLine>
+	<cac:CollectionInvoiceLine>
+		<cbc:ID>SUPL</cbc:ID>
+		<cbc:TaxInclusiveLineExtensionAmount currencyID="EUR">10.00</cbc:TaxInclusiveLineExtensionAmount>
+		<cac:Item>
+			<cbc:Description>Suplido</cbc:Description>
+		</cac:Item>
+	</cac:CollectionInvoiceLine>
 </Invoice>

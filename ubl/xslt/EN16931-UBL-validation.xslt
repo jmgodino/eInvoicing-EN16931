@@ -702,7 +702,7 @@
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
           </xsl:attribute>
-          <svrl:text>[BR-CO-16]-Amount due for payment (BT-115) = Invoice total amount with VAT (BT-112) -Paid amount (BT-113) +Rounding amount (BT-114).</svrl:text>
+          <svrl:text>[BR-CO-16]-Amount due for payment (BT-115) = Invoice total amount with VAT (BT-112) - Paid amount (BT-113) + Sum of amounts collected in the name of a third party (BT-179) + Rounding amount (BT-114).</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
