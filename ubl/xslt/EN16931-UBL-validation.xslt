@@ -37,6 +37,18 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:function>
+  <xsl:function as="xsd:decimal" name="f:redondeaImporte">
+    <xsl:param as="xs:decimal" name="valor" />
+    <xsl:value-of select="round($valor, 2)" />
+  </xsl:function>
+  <xsl:function as="xsd:boolean" name="f:margen">
+    <xsl:param as="xs:decimal" name="valor" />
+    <xsl:param as="xs:decimal" name="referencia" />
+    <xsl:param as="xs:decimal" name="tolerancia" />
+    <xsl:variable name="v" select="if ($valor) then $valor else 0" />
+    <xsl:variable name="r" select="if ($referencia) then $referencia else 0" />
+    <xsl:value-of select="abs($v - $r) le $tolerancia" />
+  </xsl:function>
 
 
 <!--DEFAULT RULES-->

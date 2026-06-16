@@ -29,7 +29,7 @@
       <plugin>
         <groupId>io.github.spfe</groupId>
         <artifactId>ph-schematron-maven-plugin</artifactId>
-        <version>9.2.2-SNAPSHOT</version>
+        <version>9.2.2</version>
         <executions>
 <!--
 -->
