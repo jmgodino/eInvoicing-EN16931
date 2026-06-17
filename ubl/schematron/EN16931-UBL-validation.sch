@@ -25,11 +25,18 @@
   <!-- ========================= -->
   <include href="abstract/EN16931-model.sch"/>
   <include href="abstract/EN16931-syntax.sch"/>
+
   <!-- Data Binding parameters -->
   <!-- ======================= -->
   <include href="UBL/EN16931-UBL-model.sch"/>
   <include href="UBL/EN16931-UBL-syntax.sch"/>
+
+
   <!-- Code Lists Binding rules -->
   <!-- ======================== -->
   <include href="codelist/EN16931-UBL-codes.sch"/>
+
+  <!-- Adaptación de la SPFE -->
+  <include href="UBL/EN16931-UBL-spfe.sch"/>
+
 </schema>

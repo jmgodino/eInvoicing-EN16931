@@ -225,6 +225,18 @@
         <xsl:apply-templates />
       </svrl:active-pattern>
       <xsl:apply-templates mode="M13" select="/" />
+      <svrl:active-pattern>
+        <xsl:attribute name="document">
+          <xsl:value-of select="document-uri(/)" />
+        </xsl:attribute>
+        <xsl:attribute name="documents">
+          <xsl:value-of select="document-uri(/)" />
+        </xsl:attribute>
+        <xsl:attribute name="id">SPFE-model</xsl:attribute>
+        <xsl:attribute name="name">SPFE-model</xsl:attribute>
+        <xsl:apply-templates />
+      </svrl:active-pattern>
+      <xsl:apply-templates mode="M14" select="/" />
     </svrl:schematron-output>
   </xsl:template>
 
@@ -15426,5 +15438,58 @@
   <xsl:template match="text()" mode="M13" priority="-1" />
   <xsl:template match="@*|node()" mode="M13" priority="-2">
     <xsl:apply-templates mode="M13" select="@*|*" />
+  </xsl:template>
+
+<!--PATTERN SPFE-model-->
+
+
+	<!--RULE -->
+<xsl:template match="cac:TaxTotal/cac:TaxSubtotal" mode="M14" priority="1001">
+    <svrl:fired-rule context="cac:TaxTotal/cac:TaxSubtotal" />
+
+		<!--ASSERT -->
+<xsl:choose>
+      <xsl:when test="exists(cac:TaxCategory) and (not(cac:TaxCategory/cbc:ID = 'S') or cac:TaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12))" />
+      <xsl:otherwise>
+        <svrl:failed-assert test="exists(cac:TaxCategory) and (not(cac:TaxCategory/cbc:ID = 'S') or cac:TaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12))">
+          <xsl:attribute name="id">BR-ES-01</xsl:attribute>
+          <xsl:attribute name="flag">fatal</xsl:attribute>
+          <xsl:attribute name="location">
+            <xsl:apply-templates mode="schematron-select-full-path" select="." />
+          </xsl:attribute>
+          <svrl:text>[BR-ES-01]-Tipo no válido [<xsl:text />
+            <xsl:value-of select="cac:TaxCategory/cbc:Percent" />
+            <xsl:text />]. En el desglose de IVA, los tipos del IVA admitidos son 21%, 10% y 4%.</svrl:text>
+        </svrl:failed-assert>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates mode="M14" select="@*|*" />
+  </xsl:template>
+
+	<!--RULE -->
+<xsl:template match="cac:InvoiceLine" mode="M14" priority="1000">
+    <svrl:fired-rule context="cac:InvoiceLine" />
+
+		<!--ASSERT -->
+<xsl:choose>
+      <xsl:when test="exists(cac:Item/cac:ClassifiedTaxCategory) and (not(cac:Item/cac:ClassifiedTaxCategory/cbc:ID = 'S') or cac:Item/cac:ClassifiedTaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12))" />
+      <xsl:otherwise>
+        <svrl:failed-assert test="exists(cac:Item/cac:ClassifiedTaxCategory) and (not(cac:Item/cac:ClassifiedTaxCategory/cbc:ID = 'S') or cac:Item/cac:ClassifiedTaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12))">
+          <xsl:attribute name="id">BR-ES-02</xsl:attribute>
+          <xsl:attribute name="flag">fatal</xsl:attribute>
+          <xsl:attribute name="location">
+            <xsl:apply-templates mode="schematron-select-full-path" select="." />
+          </xsl:attribute>
+          <svrl:text>[BR-ES-02]-Tipo no válido [<xsl:text />
+            <xsl:value-of select="cac:Item/cac:ClassifiedTaxCategory/cbc:Percent" />
+            <xsl:text />]. Los tipos del IVA admitidos para los bienes y servicios facturados son 21%, 10% y 4%.</svrl:text>
+        </svrl:failed-assert>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates mode="M14" select="@*|*" />
+  </xsl:template>
+  <xsl:template match="text()" mode="M14" priority="-1" />
+  <xsl:template match="@*|node()" mode="M14" priority="-2">
+    <xsl:apply-templates mode="M14" select="@*|*" />
   </xsl:template>
 </xsl:stylesheet>
