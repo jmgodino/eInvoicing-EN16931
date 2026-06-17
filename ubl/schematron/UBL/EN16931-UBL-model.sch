@@ -81,19 +81,32 @@
     f:comoNumero(cbc:AllowanceTotalAmount, 0)) "/>
 
   <!-- BR-CO-14 reescrita para que se entienda mejor -->
-  <param name="BR-CO-14" value="not(cac:TaxSubtotal) or xs:decimal(child::cbc:TaxAmount) = f:redondeaImporte(sum(cac:TaxSubtotal/xs:decimal(cbc:TaxAmount)))"/>
+  <param name="BR-CO-14" value="
+    not(cac:TaxSubtotal) or 
+    xs:decimal(child::cbc:TaxAmount) = f:redondeaImporte(sum(cac:TaxSubtotal/xs:decimal(cbc:TaxAmount)))"/>
+  
+  
   <!-- BR-CO-15 reescrita para que se entienda mejor -->
-  <param name="BR-CO-15" value="every $Currency in cbc:DocumentCurrencyCode satisfies (count(cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) eq 1) and cac:LegalMonetaryTotal/xs:decimal(cbc:TaxInclusiveAmount) = f:redondeaImporte(cac:LegalMonetaryTotal/xs:decimal(cbc:TaxExclusiveAmount) + cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency]))"/>
+  <param name="BR-CO-15" value="
+    every $Currency in cbc:DocumentCurrencyCode satisfies (
+      count(cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) eq 1) and 
+      cac:LegalMonetaryTotal/xs:decimal(cbc:TaxInclusiveAmount) = 
+        f:redondeaImporte(
+          cac:LegalMonetaryTotal/xs:decimal(cbc:TaxExclusiveAmount) + 
+          cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency]
+        )
+    )"/>
 
   <!-- BR-CO-16 modificada en versión de 2026 -->
   <param name="BR-CO-16" value="f:enMargen(f:comoNumero(cbc:PayableAmount, 0), f:redondeaImporte(
     f:comoNumero(cbc:TaxInclusiveAmount, 0) -
     f:comoNumero(cbc:PrepaidAmount, 0) + 
-    f:comoNumero(../cac:CollectionInvoiceLine/cbc:TaxInclusiveLineExtensionAmount, 0) +
+    f:comoNumero(//cac:CollectionInvoiceLine/cbc:TaxInclusiveLineExtensionAmount, 0) +
     f:comoNumero(cbc:PayableRoundingAmount, 0)), 0.1)
   "/>
 
   <!-- BR-CO-17: Suprimida en versión de 2026 -->
+
 
   <param name="BR-CO-18" value="exists(cac:TaxTotal/cac:TaxSubtotal)"/>
   <param name="BR-CO-19" value="exists(cbc:StartDate) or exists(cbc:EndDate) or (exists(cbc:DescriptionCode) and not(exists(cbc:StartDate)) and not(exists(cbc:EndDate)))"/>
@@ -105,23 +118,97 @@
   <param name="BR-CO-26" value="exists(cac:Party/cac:PartyTaxScheme[cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']/cbc:CompanyID) or exists(cac:Party/cac:PartyIdentification/cbc:ID[not(@schemeID = 'SEPA')]) or exists(cac:Party/cac:PartyLegalEntity/cbc:CompanyID)"/>
 
   <param name="BR-CO-32" value="f:comoNumero(cbc:LineExtensionAmount, 0) = 
-    round(
-      (f:comoNumero(cac:Price/cbc:PriceAmount,0) div 
-       f:comoNumero(cac:Price/cbc:BaseQuantity, 1)) * 
-      f:comoNumero(cbc:InvoicedQuantity, 1), 2) + 
+    f:redondeaImporte(
+      (f:comoNumero(cac:Price/cbc:PriceAmount, 0) div f:comoNumero(cac:Price/cbc:BaseQuantity, 1)) * f:comoNumero(cbc:InvoicedQuantity, 1)) + 
     f:comoNumero(cac:AllowanceCharge[cbc:ChargeIndicator = true()]/cbc:Amount, 0) - 
     f:comoNumero(cac:AllowanceCharge[cbc:ChargeIndicator = false()]/cbc:Amount, 0)" />  
 
-  <param name="BR-S-01" value="((count(//cac:AllowanceCharge/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) + count(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S'])) &gt; 0 and count(cac:TaxTotal/cac:TaxSubtotal/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) &gt; 0) or ((count(//cac:AllowanceCharge/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) + count(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S'])) = 0 and count(cac:TaxTotal/cac:TaxSubtotal/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) = 0)"/>
-  <param name="BR-S-02" value="(exists(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']) and (exists(//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID) or exists(//cac:TaxRepresentativeParty/cac:PartyTaxScheme[cac:TaxScheme/(normalize-space(upper-case(cbc:ID)) = 'VAT')]/cbc:CompanyID))) or not(exists(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S']))"/>
-  <param name="BR-S-03" value="(exists(//cac:AllowanceCharge[cbc:ChargeIndicator=false()]/cac:TaxCategory[normalize-space(cbc:ID)='S'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']) and (exists(//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID) or exists(//cac:TaxRepresentativeParty/cac:PartyTaxScheme[cac:TaxScheme/(normalize-space(upper-case(cbc:ID)) = 'VAT')]/cbc:CompanyID))) or not(exists(//cac:AllowanceCharge[cbc:ChargeIndicator=false()]/cac:TaxCategory[normalize-space(cbc:ID)='S'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']))"/>
-  <param name="BR-S-04" value="(exists(//cac:AllowanceCharge[cbc:ChargeIndicator=true()]/cac:TaxCategory[normalize-space(cbc:ID)='S'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']) and (exists(//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID) or exists(//cac:TaxRepresentativeParty/cac:PartyTaxScheme[cac:TaxScheme/(normalize-space(upper-case(cbc:ID)) = 'VAT')]/cbc:CompanyID))) or not(exists(//cac:AllowanceCharge[cbc:ChargeIndicator=true()]/cac:TaxCategory[normalize-space(cbc:ID)='S'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']))"/>
+    <!-- Nueva regla EN-16931:2026 -->
+    <param name="BR-CO-38" value="
+      ./cbc:ChargeIndicator = true() or 
+      (not(exists(cbc:BaseAmount)) and not (exists(cbc:MultiplierFactorNumeric))) or 
+      f:comoNumero(cbc:Amount, 0) = f:redondeaImporte((f:comoNumero(cbc:BaseAmount, 0) * f:comoNumero(cbc:MultiplierFactorNumeric, 0)))
+    " />  
+    
+    <!-- Nueva regla EN-16931:2026 -->
+    <param name="BR-CO-39" value="
+      ./cbc:ChargeIndicator = false() or 
+      (not(exists(cbc:BaseAmount)) and not (exists(cbc:MultiplierFactorNumeric))) or 
+      f:comoNumero(cbc:Amount, 0) = f:redondeaImporte((f:comoNumero(cbc:BaseAmount, 0) * f:comoNumero(cbc:MultiplierFactorNumeric, 0)))
+    " />  
+
+
+<param name="BR-S-01" value="
+      (count(cac:TaxTotal/cac:TaxSubtotal/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) &gt; 0 
+      and 
+      (count(//cac:AllowanceCharge/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) + count(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S']))  &gt; 0) 
+    or 
+      (count(cac:TaxTotal/cac:TaxSubtotal/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) = 0 
+      and 
+      (count(//cac:AllowanceCharge/cac:TaxCategory[normalize-space(cbc:ID) = 'S']) + count(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S'])) = 0)
+  "/>
+
+  <param name="BR-S-02" value="
+      (exists(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']) and 
+      (exists(//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID) 
+      or 
+      exists(//cac:TaxRepresentativeParty/cac:PartyTaxScheme[cac:TaxScheme/(normalize-space(upper-case(cbc:ID)) = 'VAT')]/cbc:CompanyID))) 
+    or 
+      not(exists(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'S']))
+  "/>
+
+ <param name="BR-S-03" value="
+      (exists(//cac:AllowanceCharge[cbc:ChargeIndicator=false()]/cac:TaxCategory[normalize-space(cbc:ID)='S'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']) and 
+      (exists(//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID) 
+      or
+      exists(//cac:TaxRepresentativeParty/cac:PartyTaxScheme[cac:TaxScheme/(normalize-space(upper-case(cbc:ID)) = 'VAT')]/cbc:CompanyID)))
+    or 
+      not(exists(//cac:AllowanceCharge[cbc:ChargeIndicator=false()]/cac:TaxCategory[normalize-space(cbc:ID)='S'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']))"/>
+  
+  <param name="BR-S-04" value="
+      (exists(//cac:AllowanceCharge[cbc:ChargeIndicator=true()]/cac:TaxCategory[normalize-space(cbc:ID)='S'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']) and 
+      (exists(//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID) 
+      or 
+      exists(//cac:TaxRepresentativeParty/cac:PartyTaxScheme[cac:TaxScheme/(normalize-space(upper-case(cbc:ID)) = 'VAT')]/cbc:CompanyID))) 
+    or 
+      not(exists(//cac:AllowanceCharge[cbc:ChargeIndicator=true()]/cac:TaxCategory[normalize-space(cbc:ID)='S'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']))"/>
+
   <param name="BR-S-05" value="(cbc:Percent) &gt; 0"/>
   <param name="BR-S-06" value="(cbc:Percent) &gt; 0"/>
   <param name="BR-S-07" value="(cbc:Percent) &gt; 0"/>
-  <param name="BR-S-08" value="every $rate in xs:decimal(cbc:Percent) satisfies (((exists(//cac:InvoiceLine[cac:Item/cac:ClassifiedTaxCategory/normalize-space(cbc:ID) = 'S'][cac:Item/cac:ClassifiedTaxCategory/xs:decimal(cbc:Percent) =$rate]) or exists(//cac:AllowanceCharge[cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate])) and ((../xs:decimal(cbc:TaxableAmount - 1) &lt; (sum(../../../cac:InvoiceLine[cac:Item/cac:ClassifiedTaxCategory/normalize-space(cbc:ID)='S'][cac:Item/cac:ClassifiedTaxCategory/xs:decimal(cbc:Percent) =$rate]/xs:decimal(cbc:LineExtensionAmount)) + sum(../../../cac:AllowanceCharge[cbc:ChargeIndicator=true()][cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:Amount)) - sum(../../../cac:AllowanceCharge[cbc:ChargeIndicator=false()][cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:Amount)))) and (../xs:decimal(cbc:TaxableAmount + 1) &gt; (sum(../../../cac:InvoiceLine[cac:Item/cac:ClassifiedTaxCategory/normalize-space(cbc:ID)='S'][cac:Item/cac:ClassifiedTaxCategory/xs:decimal(cbc:Percent) =$rate]/xs:decimal(cbc:LineExtensionAmount)) + sum(../../../cac:AllowanceCharge[cbc:ChargeIndicator=true()][cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:Amount)) - sum(../../../cac:AllowanceCharge[cbc:ChargeIndicator=false()][cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:Amount)))))) or (exists(//cac:CreditNoteLine[cac:Item/cac:ClassifiedTaxCategory/normalize-space(cbc:ID) = 'S'][cac:Item/cac:ClassifiedTaxCategory/xs:decimal(cbc:Percent) =$rate]) or exists(//cac:AllowanceCharge[cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate])) and ((../xs:decimal(cbc:TaxableAmount - 1) &lt; (sum(../../../cac:CreditNoteLine[cac:Item/cac:ClassifiedTaxCategory/normalize-space(cbc:ID)='S'][cac:Item/cac:ClassifiedTaxCategory/xs:decimal(cbc:Percent) =$rate]/xs:decimal(cbc:LineExtensionAmount)) + sum(../../../cac:AllowanceCharge[cbc:ChargeIndicator=true()][cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:Amount)) - sum(../../../cac:AllowanceCharge[cbc:ChargeIndicator=false()][cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:Amount)))) and (../xs:decimal(cbc:TaxableAmount + 1) &gt; (sum(../../../cac:CreditNoteLine[cac:Item/cac:ClassifiedTaxCategory/normalize-space(cbc:ID)='S'][cac:Item/cac:ClassifiedTaxCategory/xs:decimal(cbc:Percent) =$rate]/xs:decimal(cbc:LineExtensionAmount)) + sum(../../../cac:AllowanceCharge[cbc:ChargeIndicator=true()][cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:Amount)) - sum(../../../cac:AllowanceCharge[cbc:ChargeIndicator=false()][cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:Amount))))))"/>
-  <param name="BR-S-09" value="(abs(xs:decimal(../cbc:TaxAmount)) - 1 &lt;  round((abs(xs:decimal(../cbc:TaxableAmount)) * (xs:decimal(cbc:Percent) div 100)) * 10 * 10) div 100 ) and (abs(xs:decimal(../cbc:TaxAmount)) + 1 &gt;  round((abs(xs:decimal(../cbc:TaxableAmount)) * (xs:decimal(cbc:Percent) div 100)) * 10 * 10) div 100 )"/>
+
+  <!-- BR-S-08 Mejora importante en la forma de calcular márgenes de error y agrupar información (Invoice vs CreditNote) -->
+  <param name="BR-S-08" value="
+    every $rate in xs:decimal(cbc:Percent) satisfies (
+        (
+          exists(//cac:InvoiceLine[cac:Item/cac:ClassifiedTaxCategory/normalize-space(cbc:ID) = 'S'][cac:Item/cac:ClassifiedTaxCategory/xs:decimal(cbc:Percent) = $rate]) 
+        or 
+          exists(//cac:CreditNoteLine[cac:Item/cac:ClassifiedTaxCategory/normalize-space(cbc:ID) = 'S'][cac:Item/cac:ClassifiedTaxCategory/xs:decimal(cbc:Percent) = $rate]) 
+        or 
+          exists(//cac:AllowanceCharge[cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate])
+        ) 
+        and 
+          f:enMargen(../f:comoNumero(cbc:TaxableAmount, 0), 
+            f:comoNumero(../../../cac:InvoiceLine[cac:Item/cac:ClassifiedTaxCategory/normalize-space(cbc:ID)='S'][cac:Item/cac:ClassifiedTaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:LineExtensionAmount), 0) 
+            +
+            f:comoNumero(../../../cac:CreditNoteLine[cac:Item/cac:ClassifiedTaxCategory/normalize-space(cbc:ID)='S'][cac:Item/cac:ClassifiedTaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:LineExtensionAmount), 0) 
+            + 
+            f:comoNumero(../../../cac:AllowanceCharge[cbc:ChargeIndicator=true()][cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:Amount), 0) 
+            - 
+            f:comoNumero(../../../cac:AllowanceCharge[cbc:ChargeIndicator=false()][cac:TaxCategory/normalize-space(cbc:ID)='S'][cac:TaxCategory/xs:decimal(cbc:Percent) = $rate]/xs:decimal(cbc:Amount), 0)
+          , 1))
+  "/>
+
+  <!-- BR-S-09 Mejora importante en la forma de calcular márgenes de error -->
+  <param name="BR-S-09" value="
+    f:enMargen(
+      f:comoNumero(../cbc:TaxAmount, 0), 
+      f:redondeaImporte(f:comoNumero(../cbc:TaxableAmount, 0) * (f:comoNumero(cbc:Percent, 0) div 100)),
+      1) 
+  "/>
+
   <!-- BR-S-10: Suprimida en versión de 2026 -->
+
   <param name="BR-Z-01" value="((exists(//cac:TaxCategory[cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']/cbc:ID[normalize-space(.) = 'Z']) or exists(//cac:ClassifiedTaxCategory[cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']/cbc:ID[normalize-space(.) = 'Z'])) and (count(cac:TaxTotal/cac:TaxSubtotal/cac:TaxCategory[cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']/cbc:ID[normalize-space(.) = 'Z']) = 1)) or (not(//cac:TaxCategory[cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']/cbc:ID[normalize-space(.) = 'Z']) and not(//cac:ClassifiedTaxCategory[cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']/cbc:ID[normalize-space(.) = 'Z']))"/>
   <param name="BR-Z-02" value="(exists(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'Z'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']) and (exists(//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID) or exists(//cac:TaxRepresentativeParty/cac:PartyTaxScheme[cac:TaxScheme/(normalize-space(upper-case(cbc:ID)) = 'VAT')]/cbc:CompanyID))) or not(exists(//cac:ClassifiedTaxCategory[normalize-space(cbc:ID) = 'Z'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']))"/>
   <param name="BR-Z-03" value="(exists(//cac:AllowanceCharge[cbc:ChargeIndicator=false()]/cac:TaxCategory[normalize-space(cbc:ID)='Z'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']) and (exists(//cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID) or exists(//cac:TaxRepresentativeParty/cac:PartyTaxScheme[cac:TaxScheme/(normalize-space(upper-case(cbc:ID)) = 'VAT')]/cbc:CompanyID))) or not(exists(//cac:AllowanceCharge[cbc:ChargeIndicator=false()]/cac:TaxCategory[normalize-space(cbc:ID) = 'Z'][cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']))"/>

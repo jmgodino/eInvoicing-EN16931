@@ -28,6 +28,8 @@
     <assert test="$BR-CO-21" flag="fatal" id="BR-CO-21">[BR-CO-21]-Each Document level allowance (BG-20) shall contain a Document level allowance reason (BT-97) or a Document level allowance reason code (BT-98), or both.</assert>
     <assert test="$BR-DEC-01" flag="fatal" id="BR-DEC-01">[BR-DEC-01]-The allowed maximum number of decimals for the Document level allowance amount (BT-92) is 2.</assert>
     <assert test="$BR-DEC-02" flag="fatal" id="BR-DEC-02">[BR-DEC-02]-The allowed maximum number of decimals for the Document level allowance base amount (BT-93) is 2.</assert>
+    <assert test="$BR-CO-38" flag="fatal" id="BR-CO-38">[BR-CO-38]-XXXX</assert>    
+    <assert test="$BR-CO-39" flag="fatal" id="BR-CO-39">[BR-CO-39]-XXXX</assert>    
   </rule>
   <rule context="$Document_level_charges ">
     <assert test="$BR-36" flag="fatal" id="BR-36">[BR-36]-Each Document level charge (BG-21) shall have a Document level charge amount (BT-99).</assert>
