@@ -639,9 +639,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="(xs:decimal(cbc:LineExtensionAmount) = xs:decimal(round(sum(//(cac:InvoiceLine|cac:CreditNoteLine)/xs:decimal(cbc:LineExtensionAmount)) * 10 * 10) div 100))" />
+      <xsl:when test="f:comoNumero(cbc:LineExtensionAmount, 0) = f:redondeaImporte(f:comoNumero(//(cac:InvoiceLine|cac:CreditNoteLine)/xs:decimal(cbc:LineExtensionAmount), 0))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="(xs:decimal(cbc:LineExtensionAmount) = xs:decimal(round(sum(//(cac:InvoiceLine|cac:CreditNoteLine)/xs:decimal(cbc:LineExtensionAmount)) * 10 * 10) div 100))">
+        <svrl:failed-assert test="f:comoNumero(cbc:LineExtensionAmount, 0) = f:redondeaImporte(f:comoNumero(//(cac:InvoiceLine|cac:CreditNoteLine)/xs:decimal(cbc:LineExtensionAmount), 0))">
           <xsl:attribute name="id">BR-CO-10</xsl:attribute>
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">
@@ -654,9 +654,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="xs:decimal(cbc:AllowanceTotalAmount) = (round(sum(../cac:AllowanceCharge[cbc:ChargeIndicator=false()]/xs:decimal(cbc:Amount)) * 10 * 10) div 100) or  (not(cbc:AllowanceTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=false()]))" />
+      <xsl:when test="f:comoNumero(cbc:AllowanceTotalAmount, 0) = f:redondeaImporte(f:comoNumero(../cac:AllowanceCharge[cbc:ChargeIndicator=false()]/xs:decimal(cbc:Amount), 0))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="xs:decimal(cbc:AllowanceTotalAmount) = (round(sum(../cac:AllowanceCharge[cbc:ChargeIndicator=false()]/xs:decimal(cbc:Amount)) * 10 * 10) div 100) or (not(cbc:AllowanceTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=false()]))">
+        <svrl:failed-assert test="f:comoNumero(cbc:AllowanceTotalAmount, 0) = f:redondeaImporte(f:comoNumero(../cac:AllowanceCharge[cbc:ChargeIndicator=false()]/xs:decimal(cbc:Amount), 0))">
           <xsl:attribute name="id">BR-CO-11</xsl:attribute>
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">
@@ -669,9 +669,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="xs:decimal(cbc:ChargeTotalAmount) = (round(sum(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]/xs:decimal(cbc:Amount)) * 10 * 10) div 100) or (not(cbc:ChargeTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]))" />
+      <xsl:when test="f:comoNumero(cbc:ChargeTotalAmount, 0) = f:redondeaImporte(f:comoNumero(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]/xs:decimal(cbc:Amount), 0))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="xs:decimal(cbc:ChargeTotalAmount) = (round(sum(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]/xs:decimal(cbc:Amount)) * 10 * 10) div 100) or (not(cbc:ChargeTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]))">
+        <svrl:failed-assert test="f:comoNumero(cbc:ChargeTotalAmount, 0) = f:redondeaImporte(f:comoNumero(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]/xs:decimal(cbc:Amount), 0))">
           <xsl:attribute name="id">BR-CO-12</xsl:attribute>
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">
@@ -684,15 +684,25 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="((cbc:ChargeTotalAmount) and (cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = round((xs:decimal(cbc:LineExtensionAmount) + xs:decimal(cbc:ChargeTotalAmount) - xs:decimal(cbc:AllowanceTotalAmount)) * 10 * 10) div 100 ))  or (not(cbc:ChargeTotalAmount) and (cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = round((xs:decimal(cbc:LineExtensionAmount) - xs:decimal(cbc:AllowanceTotalAmount)) * 10 * 10 ) div 100)) or ((cbc:ChargeTotalAmount) and not(cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = round((xs:decimal(cbc:LineExtensionAmount) + xs:decimal(cbc:ChargeTotalAmount)) * 10 * 10 ) div 100)) or (not(cbc:ChargeTotalAmount) and not(cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = xs:decimal(cbc:LineExtensionAmount)))" />
+      <xsl:when test="f:comoNumero(cbc:TaxExclusiveAmount, 0) = f:redondeaImporte(     f:comoNumero(cbc:LineExtensionAmount, 0) +      f:comoNumero(cbc:ChargeTotalAmount, 0) -      f:comoNumero(cbc:AllowanceTotalAmount, 0))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="((cbc:ChargeTotalAmount) and (cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = round((xs:decimal(cbc:LineExtensionAmount) + xs:decimal(cbc:ChargeTotalAmount) - xs:decimal(cbc:AllowanceTotalAmount)) * 10 * 10) div 100 )) or (not(cbc:ChargeTotalAmount) and (cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = round((xs:decimal(cbc:LineExtensionAmount) - xs:decimal(cbc:AllowanceTotalAmount)) * 10 * 10 ) div 100)) or ((cbc:ChargeTotalAmount) and not(cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = round((xs:decimal(cbc:LineExtensionAmount) + xs:decimal(cbc:ChargeTotalAmount)) * 10 * 10 ) div 100)) or (not(cbc:ChargeTotalAmount) and not(cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = xs:decimal(cbc:LineExtensionAmount)))">
+        <svrl:failed-assert test="f:comoNumero(cbc:TaxExclusiveAmount, 0) = f:redondeaImporte( f:comoNumero(cbc:LineExtensionAmount, 0) + f:comoNumero(cbc:ChargeTotalAmount, 0) - f:comoNumero(cbc:AllowanceTotalAmount, 0))">
           <xsl:attribute name="id">BR-CO-13</xsl:attribute>
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
           </xsl:attribute>
-          <svrl:text>[BR-CO-13]-Invoice total amount without VAT (BT-109) = Σ Invoice line net amount (BT-131) - Sum of allowances on document level (BT-107) + Sum of charges on document level (BT-108).</svrl:text>
+          <svrl:text>[BR-CO-13]-Invoice total amount without VAT [<xsl:text />
+            <xsl:value-of select="f:comoNumero(cbc:TaxExclusiveAmount, 0)" />
+            <xsl:text />] (BT-109) = [<xsl:text />
+            <xsl:value-of select="f:comoNumero(cbc:LineExtensionAmount,0) + f:comoNumero(cbc:ChargeTotalAmount,0) - f:comoNumero(cbc:AllowanceTotalAmount,0)" />
+            <xsl:text />] Σ Invoice line net amount (BT-131) [<xsl:text />
+            <xsl:value-of select="f:comoNumero(cbc:LineExtensionAmount, 0)" />
+            <xsl:text />] - Sum of allowances on document level (BT-107) [<xsl:text />
+            <xsl:value-of select="f:comoNumero(cbc:AllowanceTotalAmount, 0)" />
+            <xsl:text />] + Sum of charges on document level (BT-108) [<xsl:text />
+            <xsl:value-of select="f:comoNumero(cbc:ChargeTotalAmount, 0)" />
+            <xsl:text />].</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
@@ -1080,9 +1090,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="every $Currency in cbc:DocumentCurrencyCode satisfies (count(cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) eq 1) and (cac:LegalMonetaryTotal/xs:decimal(cbc:TaxInclusiveAmount) = round( (cac:LegalMonetaryTotal/xs:decimal(cbc:TaxExclusiveAmount) + cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) * 10 * 10) div 100)" />
+      <xsl:when test="every $Currency in cbc:DocumentCurrencyCode satisfies (count(cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) eq 1) and cac:LegalMonetaryTotal/xs:decimal(cbc:TaxInclusiveAmount) = f:redondeaImporte(cac:LegalMonetaryTotal/xs:decimal(cbc:TaxExclusiveAmount) + cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency]))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="every $Currency in cbc:DocumentCurrencyCode satisfies (count(cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) eq 1) and (cac:LegalMonetaryTotal/xs:decimal(cbc:TaxInclusiveAmount) = round( (cac:LegalMonetaryTotal/xs:decimal(cbc:TaxExclusiveAmount) + cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) * 10 * 10) div 100)">
+        <svrl:failed-assert test="every $Currency in cbc:DocumentCurrencyCode satisfies (count(cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) eq 1) and cac:LegalMonetaryTotal/xs:decimal(cbc:TaxInclusiveAmount) = f:redondeaImporte(cac:LegalMonetaryTotal/xs:decimal(cbc:TaxExclusiveAmount) + cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency]))">
           <xsl:attribute name="id">BR-CO-15</xsl:attribute>
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">
@@ -2394,9 +2404,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="(xs:decimal(child::cbc:TaxAmount)= round((sum(cac:TaxSubtotal/xs:decimal(cbc:TaxAmount)) * 10 * 10)) div 100) or not(cac:TaxSubtotal)" />
+      <xsl:when test="not(cac:TaxSubtotal) or xs:decimal(child::cbc:TaxAmount) = f:redondeaImporte(sum(cac:TaxSubtotal/xs:decimal(cbc:TaxAmount)))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="(xs:decimal(child::cbc:TaxAmount)= round((sum(cac:TaxSubtotal/xs:decimal(cbc:TaxAmount)) * 10 * 10)) div 100) or not(cac:TaxSubtotal)">
+        <svrl:failed-assert test="not(cac:TaxSubtotal) or xs:decimal(child::cbc:TaxAmount) = f:redondeaImporte(sum(cac:TaxSubtotal/xs:decimal(cbc:TaxAmount)))">
           <xsl:attribute name="id">BR-CO-14</xsl:attribute>
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">

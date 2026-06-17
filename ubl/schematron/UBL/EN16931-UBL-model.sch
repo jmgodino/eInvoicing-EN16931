@@ -66,14 +66,26 @@
   <param name="BR-CO-03" value="(exists(cbc:TaxPointDate) and not(cac:InvoicePeriod/cbc:DescriptionCode)) or (not(cbc:TaxPointDate) and exists(cac:InvoicePeriod/cbc:DescriptionCode)) or (not(cbc:TaxPointDate) and not(cac:InvoicePeriod/cbc:DescriptionCode))"/>
   <param name="BR-CO-04" value="(cac:Item/cac:ClassifiedTaxCategory[cac:TaxScheme/(normalize-space(upper-case(cbc:ID))='VAT')]/cbc:ID)"/>
   <param name="BR-CO-09" value="( contains( ' 1A AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH EL ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS XI YE YT ZA ZM ZW ',substring(cbc:CompanyID,1,2) ) )"/>
-  <param name="BR-CO-10" value="(xs:decimal(cbc:LineExtensionAmount) = xs:decimal(round(sum(//(cac:InvoiceLine|cac:CreditNoteLine)/xs:decimal(cbc:LineExtensionAmount)) * 10 * 10) div 100))"/>
-  <param name="BR-CO-11" value="xs:decimal(cbc:AllowanceTotalAmount) = (round(sum(../cac:AllowanceCharge[cbc:ChargeIndicator=false()]/xs:decimal(cbc:Amount)) * 10 * 10) div 100) or  (not(cbc:AllowanceTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=false()]))"/>
-  <param name="BR-CO-12" value="xs:decimal(cbc:ChargeTotalAmount) = (round(sum(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]/xs:decimal(cbc:Amount)) * 10 * 10) div 100) or (not(cbc:ChargeTotalAmount) and not(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]))"/>
-  <param name="BR-CO-13" value="((cbc:ChargeTotalAmount) and (cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = round((xs:decimal(cbc:LineExtensionAmount) + xs:decimal(cbc:ChargeTotalAmount) - xs:decimal(cbc:AllowanceTotalAmount)) * 10 * 10) div 100 ))  or (not(cbc:ChargeTotalAmount) and (cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = round((xs:decimal(cbc:LineExtensionAmount) - xs:decimal(cbc:AllowanceTotalAmount)) * 10 * 10 ) div 100)) or ((cbc:ChargeTotalAmount) and not(cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = round((xs:decimal(cbc:LineExtensionAmount) + xs:decimal(cbc:ChargeTotalAmount)) * 10 * 10 ) div 100)) or (not(cbc:ChargeTotalAmount) and not(cbc:AllowanceTotalAmount) and (xs:decimal(cbc:TaxExclusiveAmount) = xs:decimal(cbc:LineExtensionAmount)))"/>
-  <param name="BR-CO-14" value="(xs:decimal(child::cbc:TaxAmount)= round((sum(cac:TaxSubtotal/xs:decimal(cbc:TaxAmount)) * 10 * 10)) div 100) or not(cac:TaxSubtotal)"/>
-  <param name="BR-CO-15" value="every $Currency in cbc:DocumentCurrencyCode satisfies (count(cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) eq 1) and (cac:LegalMonetaryTotal/xs:decimal(cbc:TaxInclusiveAmount) = round( (cac:LegalMonetaryTotal/xs:decimal(cbc:TaxExclusiveAmount) + cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) * 10 * 10) div 100)"/>
+  <!-- BR-CO-10 reescrita para que se entienda mejor -->
+  <param name="BR-CO-10" value="f:comoNumero(cbc:LineExtensionAmount, 0) = f:redondeaImporte(f:comoNumero(//(cac:InvoiceLine|cac:CreditNoteLine)/xs:decimal(cbc:LineExtensionAmount), 0))"/>
+  <!-- BR-CO-11 reescrita para que se entienda mejor -->
+  <param name="BR-CO-11" value="f:comoNumero(cbc:AllowanceTotalAmount, 0) = f:redondeaImporte(f:comoNumero(../cac:AllowanceCharge[cbc:ChargeIndicator=false()]/xs:decimal(cbc:Amount), 0))"/>
+  <!-- BR-CO-12 reescrita para que se entienda mejor -->
+  <param name="BR-CO-12" value="f:comoNumero(cbc:ChargeTotalAmount, 0) = f:redondeaImporte(f:comoNumero(../cac:AllowanceCharge[cbc:ChargeIndicator=true()]/xs:decimal(cbc:Amount), 0))"/>
+ 
+  <!-- BR-CO-13 reescrita para que se entienda mejor -->
+  <param name="BR-CO-13" value="
+    f:comoNumero(cbc:TaxExclusiveAmount, 0) = f:redondeaImporte(
+    f:comoNumero(cbc:LineExtensionAmount, 0) + 
+    f:comoNumero(cbc:ChargeTotalAmount, 0) - 
+    f:comoNumero(cbc:AllowanceTotalAmount, 0)) "/>
 
-  <!-- BR-CO-16 modificada> en versión de 2026 -->
+  <!-- BR-CO-14 reescrita para que se entienda mejor -->
+  <param name="BR-CO-14" value="not(cac:TaxSubtotal) or xs:decimal(child::cbc:TaxAmount) = f:redondeaImporte(sum(cac:TaxSubtotal/xs:decimal(cbc:TaxAmount)))"/>
+  <!-- BR-CO-15 reescrita para que se entienda mejor -->
+  <param name="BR-CO-15" value="every $Currency in cbc:DocumentCurrencyCode satisfies (count(cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency])) eq 1) and cac:LegalMonetaryTotal/xs:decimal(cbc:TaxInclusiveAmount) = f:redondeaImporte(cac:LegalMonetaryTotal/xs:decimal(cbc:TaxExclusiveAmount) + cac:TaxTotal/xs:decimal(cbc:TaxAmount[@currencyID=$Currency]))"/>
+
+  <!-- BR-CO-16 modificada en versión de 2026 -->
   <param name="BR-CO-16" value="f:enMargen(f:comoNumero(cbc:PayableAmount, 0), f:redondeaImporte(
     f:comoNumero(cbc:TaxInclusiveAmount, 0) -
     f:comoNumero(cbc:PrepaidAmount, 0) + 
