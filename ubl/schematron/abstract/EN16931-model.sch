@@ -28,6 +28,8 @@
     <assert test="$BR-CO-21" flag="fatal" id="BR-CO-21">[BR-CO-21]-Each Document level allowance (BG-20) shall contain a Document level allowance reason (BT-97) or a Document level allowance reason code (BT-98), or both.</assert>
     <assert test="$BR-DEC-01" flag="fatal" id="BR-DEC-01">[BR-DEC-01]-The allowed maximum number of decimals for the Document level allowance amount (BT-92) is 2.</assert>
     <assert test="$BR-DEC-02" flag="fatal" id="BR-DEC-02">[BR-DEC-02]-The allowed maximum number of decimals for the Document level allowance base amount (BT-93) is 2.</assert>
+    <assert test="$BR-CO-38" flag="fatal" id="BR-CO-38">[BR-CO-38]-If Document level allowance base amount [BT-93] or document level allowance percentaje [BT-94] have value then document level allowance amount [BT-92] = [BT-93] * [BT-94]</assert>    
+    <assert test="$BR-CO-39" flag="fatal" id="BR-CO-39">[BR-CO-39]-If Document level charge base amount [BT-100] or document level charge percentaje [BT-101] have value then document level charge amount [BT-99] = [BT-100] * [BT-101]</assert>    
   </rule>
   <rule context="$Document_level_charges ">
     <assert test="$BR-36" flag="fatal" id="BR-36">[BR-36]-Each Document level charge (BG-21) shall have a Document level charge amount (BT-99).</assert>
@@ -124,7 +126,7 @@
     <assert test="$BR-28" flag="fatal" id="BR-28">[BR-28]-The Item gross price (BT-148) shall NOT be negative.</assert>
     <assert test="$BR-CO-04" flag="fatal" id="BR-CO-04">[BR-CO-04]-Each Invoice line (BG-25) shall be categorized with an Invoiced item VAT category code (BT-151).</assert>
     <assert test="$BR-DEC-23" flag="fatal" id="BR-DEC-23">[BR-DEC-23]-The allowed maximum number of decimals for the Invoice line net amount (BT-131) is 2.</assert>
-    <assert test="$BR-CO-32" flag="fatal" id="BR-CO-32">[BR-CO-32]-XXXX</assert>    
+    <assert test="$BR-CO-32" flag="fatal" id="BR-CO-32">[BR-CO-32]-Invoice line net amount [BT-131] = Item net price [BT-146] divided by Item price base quantity [BT-149] multiplied by the invoiced quantity [BT-129] adding the sum of the invoice line charge amount [BT-141] minus the sum of the invoice line allowance amount [BT-136] rounded to two decimals</assert>    
   </rule>
   <rule context="$Invoice_line_allowances ">
     <assert test="$BR-41" flag="fatal" id="BR-41">[BR-41]-Each Invoice line allowance (BG-27) shall have an Invoice line allowance amount (BT-136).</assert>

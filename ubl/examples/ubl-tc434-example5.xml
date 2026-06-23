@@ -215,7 +215,7 @@
         <cbc:AllowanceChargeReason>Loyal customer</cbc:AllowanceChargeReason>
         <cbc:MultiplierFactorNumeric>10</cbc:MultiplierFactorNumeric>
         <cbc:Amount currencyID="DKK">150.00</cbc:Amount>
-        <cbc:BaseAmount currencyID="DKK">1500.00</cbc:BaseAmount>
+        <cbc:BaseAmount currencyID="DKK">15.00</cbc:BaseAmount>
         <cac:TaxCategory>
             <cbc:ID>S</cbc:ID>
             <cbc:Percent>25</cbc:Percent>
@@ -230,7 +230,7 @@
         <cbc:AllowanceChargeReason>Packaging</cbc:AllowanceChargeReason>
         <cbc:MultiplierFactorNumeric>10</cbc:MultiplierFactorNumeric>
         <cbc:Amount currencyID="DKK">150.00</cbc:Amount>
-        <cbc:BaseAmount currencyID="DKK">1500.00</cbc:BaseAmount>
+        <cbc:BaseAmount currencyID="DKK">15.00</cbc:BaseAmount>
         <cac:TaxCategory>
             <cbc:ID>S</cbc:ID>
             <cbc:Percent>25</cbc:Percent>
