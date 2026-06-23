@@ -470,7 +470,7 @@
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
           </xsl:attribute>
-          <svrl:text>[BR-CO-38]-XXXX</svrl:text>
+          <svrl:text>[BR-CO-38]-If Document level allowance base amount [BT-93] or document level allowance percentaje [BT-94] have value then document level allowance amount [BT-92] = [BT-93] * [BT-94]</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
@@ -485,7 +485,7 @@
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
           </xsl:attribute>
-          <svrl:text>[BR-CO-39]-XXXX</svrl:text>
+          <svrl:text>[BR-CO-39]-If Document level charge base amount [BT-100] or document level charge percentaje [BT-101] have value then document level charge amount [BT-99] = [BT-100] * [BT-101]</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
@@ -1839,7 +1839,7 @@
           <xsl:attribute name="location">
             <xsl:apply-templates mode="schematron-select-full-path" select="." />
           </xsl:attribute>
-          <svrl:text>[BR-CO-32]-XXXX</svrl:text>
+          <svrl:text>[BR-CO-32]-Invoice line net amount [BT-131] = Item net price [BT-146] divided by Item price base quantity [BT-149] multiplied by the invoiced quantity [BT-129] adding the sum of the invoice line charge amount [BT-141] minus the sum of the invoice line allowance amount [BT-136] rounded to two decimals</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
@@ -2450,8 +2450,8 @@
   </xsl:template>
 
 	<!--RULE -->
-<xsl:template match="cac:TaxTotal/cac:TaxSubtotal" mode="M11" priority="1037">
-    <svrl:fired-rule context="cac:TaxTotal/cac:TaxSubtotal" />
+<xsl:template match="/ubl:Invoice/cac:TaxTotal/cac:TaxSubtotal | /cn:CreditNote/cac:TaxTotal/cac:TaxSubtotal" mode="M11" priority="1037">
+    <svrl:fired-rule context="/ubl:Invoice/cac:TaxTotal/cac:TaxSubtotal | /cn:CreditNote/cac:TaxTotal/cac:TaxSubtotal" />
 
 		<!--ASSERT -->
 <xsl:choose>
@@ -15489,9 +15489,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="exists(cac:TaxCategory) and (not(cac:TaxCategory/cbc:ID = 'S') or cac:TaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12))" />
+      <xsl:when test="exists(cac:TaxCategory) and (not(cac:TaxCategory/cbc:ID = 'S') or cac:TaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12, 5.2, 1.4, 0.5, 1.75))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="exists(cac:TaxCategory) and (not(cac:TaxCategory/cbc:ID = 'S') or cac:TaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12))">
+        <svrl:failed-assert test="exists(cac:TaxCategory) and (not(cac:TaxCategory/cbc:ID = 'S') or cac:TaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12, 5.2, 1.4, 0.5, 1.75))">
           <xsl:attribute name="id">BR-ES-01</xsl:attribute>
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">
@@ -15499,7 +15499,7 @@
           </xsl:attribute>
           <svrl:text>[BR-ES-01]-Tipo no válido [<xsl:text />
             <xsl:value-of select="cac:TaxCategory/cbc:Percent" />
-            <xsl:text />]. En el desglose de IVA, los tipos del IVA admitidos son 21%, 10% y 4%.</svrl:text>
+            <xsl:text />]. En el desglose de IVA, los tipos del IVA admitidos son 21%, 10% y 4% y recargos de equivalencia 5,2%, 1,4%, 0,5% y 1,75%.</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>
@@ -15512,9 +15512,9 @@
 
 		<!--ASSERT -->
 <xsl:choose>
-      <xsl:when test="exists(cac:Item/cac:ClassifiedTaxCategory) and (not(cac:Item/cac:ClassifiedTaxCategory/cbc:ID = 'S') or cac:Item/cac:ClassifiedTaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12))" />
+      <xsl:when test="exists(cac:Item/cac:ClassifiedTaxCategory) and (not(cac:Item/cac:ClassifiedTaxCategory/cbc:ID = 'S') or cac:Item/cac:ClassifiedTaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12, 5.2, 1.4, 0.5, 1.75))" />
       <xsl:otherwise>
-        <svrl:failed-assert test="exists(cac:Item/cac:ClassifiedTaxCategory) and (not(cac:Item/cac:ClassifiedTaxCategory/cbc:ID = 'S') or cac:Item/cac:ClassifiedTaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12))">
+        <svrl:failed-assert test="exists(cac:Item/cac:ClassifiedTaxCategory) and (not(cac:Item/cac:ClassifiedTaxCategory/cbc:ID = 'S') or cac:Item/cac:ClassifiedTaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12, 5.2, 1.4, 0.5, 1.75))">
           <xsl:attribute name="id">BR-ES-02</xsl:attribute>
           <xsl:attribute name="flag">fatal</xsl:attribute>
           <xsl:attribute name="location">
@@ -15522,7 +15522,7 @@
           </xsl:attribute>
           <svrl:text>[BR-ES-02]-Tipo no válido [<xsl:text />
             <xsl:value-of select="cac:Item/cac:ClassifiedTaxCategory/cbc:Percent" />
-            <xsl:text />]. Los tipos del IVA admitidos para los bienes y servicios facturados son 21%, 10% y 4%.</svrl:text>
+            <xsl:text />]. Los tipos del IVA admitidos para los bienes y servicios facturados son 21%, 10% y 4% y recargos de equivalencia 5,2%, 1,4%, 0,5% y 1,75%.</svrl:text>
         </svrl:failed-assert>
       </xsl:otherwise>
     </xsl:choose>

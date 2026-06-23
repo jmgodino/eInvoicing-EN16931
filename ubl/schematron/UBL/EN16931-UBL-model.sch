@@ -334,7 +334,7 @@
   <param name="Document_level_charges " value="/ubl:Invoice/cac:AllowanceCharge[cbc:ChargeIndicator = true()] | /cn:CreditNote/cac:AllowanceCharge[cbc:ChargeIndicator = true()]"/>
   <param name="Invoice_line_allowances " value="//cac:InvoiceLine/cac:AllowanceCharge[cbc:ChargeIndicator = false()] | //cac:CreditNoteLine/cac:AllowanceCharge[cbc:ChargeIndicator = false()]"/>
   <param name="Invoice_line_charges " value="//cac:InvoiceLine/cac:AllowanceCharge[cbc:ChargeIndicator = true()] | //cac:CreditNoteLine/cac:AllowanceCharge[cbc:ChargeIndicator = true()]"/>
-  <param name="VAT_breakdown " value="cac:TaxTotal/cac:TaxSubtotal"/>
+  <param name="VAT_breakdown " value="/ubl:Invoice/cac:TaxTotal/cac:TaxSubtotal | /cn:CreditNote/cac:TaxTotal/cac:TaxSubtotal"/>
   <param name="Payment_instructions " value="cac:PaymentMeans"/>
   <param name="Card_information " value="cac:PaymentMeans/cac:CardAccount/cbc:PrimaryAccountNumberID"/>
   <param name="Additional_supporting_documents " value="cac:AdditionalDocumentReference"/>

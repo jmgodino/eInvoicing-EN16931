@@ -45,8 +45,8 @@
       <assert id="BR-CO-21" flag="fatal" test="exists(cbc:AllowanceChargeReason) or exists(cbc:AllowanceChargeReasonCode)">[BR-CO-21]-Each Document level allowance (BG-20) shall contain a Document level allowance reason (BT-97) or a Document level allowance reason code (BT-98), or both.</assert>
       <assert id="BR-DEC-01" flag="fatal" test="string-length(substring-after(cbc:Amount,'.'))&lt;=2">[BR-DEC-01]-The allowed maximum number of decimals for the Document level allowance amount (BT-92) is 2.</assert>
       <assert id="BR-DEC-02" flag="fatal" test="string-length(substring-after(cbc:BaseAmount,'.'))&lt;=2">[BR-DEC-02]-The allowed maximum number of decimals for the Document level allowance base amount (BT-93) is 2.</assert>
-      <assert id="BR-CO-38" flag="fatal" test="./cbc:ChargeIndicator = true() or        (not(exists(cbc:BaseAmount)) and not (exists(cbc:MultiplierFactorNumeric))) or        f:comoNumero(cbc:Amount, 0) = f:redondeaImporte((f:comoNumero(cbc:BaseAmount, 0) * f:comoNumero(cbc:MultiplierFactorNumeric, 0)))">[BR-CO-38]-XXXX</assert>
-      <assert id="BR-CO-39" flag="fatal" test="./cbc:ChargeIndicator = false() or        (not(exists(cbc:BaseAmount)) and not (exists(cbc:MultiplierFactorNumeric))) or        f:comoNumero(cbc:Amount, 0) = f:redondeaImporte((f:comoNumero(cbc:BaseAmount, 0) * f:comoNumero(cbc:MultiplierFactorNumeric, 0)))">[BR-CO-39]-XXXX</assert>
+      <assert id="BR-CO-38" flag="fatal" test="./cbc:ChargeIndicator = true() or        (not(exists(cbc:BaseAmount)) and not (exists(cbc:MultiplierFactorNumeric))) or        f:comoNumero(cbc:Amount, 0) = f:redondeaImporte((f:comoNumero(cbc:BaseAmount, 0) * f:comoNumero(cbc:MultiplierFactorNumeric, 0)))">[BR-CO-38]-If Document level allowance base amount [BT-93] or document level allowance percentaje [BT-94] have value then document level allowance amount [BT-92] = [BT-93] * [BT-94]</assert>
+      <assert id="BR-CO-39" flag="fatal" test="./cbc:ChargeIndicator = false() or        (not(exists(cbc:BaseAmount)) and not (exists(cbc:MultiplierFactorNumeric))) or        f:comoNumero(cbc:Amount, 0) = f:redondeaImporte((f:comoNumero(cbc:BaseAmount, 0) * f:comoNumero(cbc:MultiplierFactorNumeric, 0)))">[BR-CO-39]-If Document level charge base amount [BT-100] or document level charge percentaje [BT-101] have value then document level charge amount [BT-99] = [BT-100] * [BT-101]</assert>
     </rule>
     <rule context="/ubl:Invoice/cac:AllowanceCharge[cbc:ChargeIndicator = true()] | /cn:CreditNote/cac:AllowanceCharge[cbc:ChargeIndicator = true()]">
       <assert id="BR-36" flag="fatal" test="exists(cbc:Amount)">[BR-36]-Each Document level charge (BG-21) shall have a Document level charge amount (BT-99).</assert>
@@ -142,7 +142,7 @@
       <assert id="BR-28" flag="fatal" test="(cac:Price/cac:AllowanceCharge/cbc:BaseAmount) >= 0 or not(exists(cac:Price/cac:AllowanceCharge/cbc:BaseAmount))">[BR-28]-The Item gross price (BT-148) shall NOT be negative.</assert>
       <assert id="BR-CO-04" flag="fatal" test="(cac:Item/cac:ClassifiedTaxCategory[cac:TaxScheme/(normalize-space(upper-case(cbc:ID))='VAT')]/cbc:ID)">[BR-CO-04]-Each Invoice line (BG-25) shall be categorized with an Invoiced item VAT category code (BT-151).</assert>
       <assert id="BR-DEC-23" flag="fatal" test="string-length(substring-after(cbc:LineExtensionAmount,'.'))&lt;=2">[BR-DEC-23]-The allowed maximum number of decimals for the Invoice line net amount (BT-131) is 2.</assert>
-      <assert id="BR-CO-32" flag="fatal" test="f:comoNumero(cbc:LineExtensionAmount, 0) =      f:redondeaImporte(       (f:comoNumero(cac:Price/cbc:PriceAmount, 0) div f:comoNumero(cac:Price/cbc:BaseQuantity, 1)) * f:comoNumero(cbc:InvoicedQuantity, 1)) +      f:comoNumero(cac:AllowanceCharge[cbc:ChargeIndicator = true()]/cbc:Amount, 0) -      f:comoNumero(cac:AllowanceCharge[cbc:ChargeIndicator = false()]/cbc:Amount, 0)">[BR-CO-32]-XXXX</assert>
+      <assert id="BR-CO-32" flag="fatal" test="f:comoNumero(cbc:LineExtensionAmount, 0) =      f:redondeaImporte(       (f:comoNumero(cac:Price/cbc:PriceAmount, 0) div f:comoNumero(cac:Price/cbc:BaseQuantity, 1)) * f:comoNumero(cbc:InvoicedQuantity, 1)) +      f:comoNumero(cac:AllowanceCharge[cbc:ChargeIndicator = true()]/cbc:Amount, 0) -      f:comoNumero(cac:AllowanceCharge[cbc:ChargeIndicator = false()]/cbc:Amount, 0)">[BR-CO-32]-Invoice line net amount [BT-131] = Item net price [BT-146] divided by Item price base quantity [BT-149] multiplied by the invoiced quantity [BT-129] adding the sum of the invoice line charge amount [BT-141] minus the sum of the invoice line allowance amount [BT-136] rounded to two decimals</assert>
     </rule>
     <rule context="//cac:InvoiceLine/cac:AllowanceCharge[cbc:ChargeIndicator = false()] | //cac:CreditNoteLine/cac:AllowanceCharge[cbc:ChargeIndicator = false()]">
       <assert id="BR-41" flag="fatal" test="exists(cbc:Amount)">[BR-41]-Each Invoice line allowance (BG-27) shall have an Invoice line allowance amount (BT-136).</assert>
@@ -213,7 +213,7 @@
     <rule context="/ubl:Invoice/cac:TaxTotal | /cn:CreditNote/cac:TaxTotal">
       <assert id="BR-CO-14" flag="fatal" test="not(cac:TaxSubtotal) or      xs:decimal(child::cbc:TaxAmount) = f:redondeaImporte(sum(cac:TaxSubtotal/xs:decimal(cbc:TaxAmount)))">[BR-CO-14]-Invoice total VAT amount (BT-110) = Σ VAT category tax amount (BT-117).</assert>
     </rule>
-    <rule context="cac:TaxTotal/cac:TaxSubtotal">
+    <rule context="/ubl:Invoice/cac:TaxTotal/cac:TaxSubtotal | /cn:CreditNote/cac:TaxTotal/cac:TaxSubtotal">
       <assert id="BR-45" flag="fatal" test="exists(cbc:TaxableAmount)">[BR-45]-Each VAT breakdown (BG-23) shall have a VAT category taxable amount (BT-116).</assert>
       <assert id="BR-46" flag="fatal" test="exists(cbc:TaxAmount)">[BR-46]-Each VAT breakdown (BG-23) shall have a VAT category tax amount (BT-117).</assert>
       <assert id="BR-47" flag="fatal" test="exists(cac:TaxCategory[cac:TaxScheme/normalize-space(upper-case(cbc:ID))='VAT']/cbc:ID)">[BR-47]-Each VAT breakdown (BG-23) shall be defined through a VAT category code (BT-118).</assert>
@@ -1211,10 +1211,10 @@
   </pattern>
   <pattern id="SPFE-model">
     <rule flag="fatal" context="cac:TaxTotal/cac:TaxSubtotal">
-      <assert id="BR-ES-01" flag="fatal" test="exists(cac:TaxCategory) and (not(cac:TaxCategory/cbc:ID = 'S') or cac:TaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12))">[BR-ES-01]-Tipo no válido [<value-of select="cac:TaxCategory/cbc:Percent" />]. En el desglose de IVA, los tipos del IVA admitidos son 21%, 10% y 4%.</assert>
+      <assert id="BR-ES-01" flag="fatal" test="exists(cac:TaxCategory) and (not(cac:TaxCategory/cbc:ID = 'S') or cac:TaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12, 5.2, 1.4, 0.5, 1.75))">[BR-ES-01]-Tipo no válido [<value-of select="cac:TaxCategory/cbc:Percent" />]. En el desglose de IVA, los tipos del IVA admitidos son 21%, 10% y 4% y recargos de equivalencia 5,2%, 1,4%, 0,5% y 1,75%.</assert>
     </rule>
     <rule flag="fatal" context="cac:InvoiceLine">
-      <assert id="BR-ES-02" flag="fatal" test="exists(cac:Item/cac:ClassifiedTaxCategory) and (not(cac:Item/cac:ClassifiedTaxCategory/cbc:ID = 'S') or cac:Item/cac:ClassifiedTaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12))">[BR-ES-02]-Tipo no válido [<value-of select="cac:Item/cac:ClassifiedTaxCategory/cbc:Percent" />]. Los tipos del IVA admitidos para los bienes y servicios facturados son 21%, 10% y 4%.</assert>
+      <assert id="BR-ES-02" flag="fatal" test="exists(cac:Item/cac:ClassifiedTaxCategory) and (not(cac:Item/cac:ClassifiedTaxCategory/cbc:ID = 'S') or cac:Item/cac:ClassifiedTaxCategory/cbc:Percent = (21, 10, 4, 0, 6, 25, 15, 12, 5.2, 1.4, 0.5, 1.75))">[BR-ES-02]-Tipo no válido [<value-of select="cac:Item/cac:ClassifiedTaxCategory/cbc:Percent" />]. Los tipos del IVA admitidos para los bienes y servicios facturados son 21%, 10% y 4% y recargos de equivalencia 5,2%, 1,4%, 0,5% y 1,75%.</assert>
     </rule>
   </pattern>
 </schema>
